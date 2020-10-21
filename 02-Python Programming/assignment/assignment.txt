@@ -1,0 +1,39 @@
+There are 7 tasks
+
+1) Create 2 jupyter notebooks and write a code to output the circumference of the circle in one notebook and another for a rectangle.
+
+
+2.1) Solve the Python Data types Task
+	1- Open code Folder.
+	2- Open 01-Python Data types Folder.
+	3- Open 10- Objects and Data Structures Assessment Test.ipynb notebook.
+	
+
+2.2) Solve the Python Files Task
+	1- Open a file, name it 'test.txt' and write 'hello world' for 5 times in it then close it.
+	2- Read the contents of the file, then make content in uppercase then write the result again to the file.
+	3- Read the third line of the file then update it to its capital case using capitalize.
+	4- Using With Statement open this file and append 'I Love python' to it.
+
+
+3) Solve the Python Statements Task
+	1- Open code Folder.
+	2- Open 02-Python Statements folder.
+	3- Solve 05-Statements Assessment Test.ipynb file.
+
+
+4) Solve the Functions Task
+	1- Open code Folder.
+	2- Open 03-Functions folder.
+	3- Solve 02-Function Practice Exercises.ipynb file.
+	4- Solve 06-Functions and Methods Homework.ipynb file.
+
+
+5) Get your hand dirty with Problems with Python folder
+
+
+6) Make project like Thanos project with data (50 images) to read all files and rename these files with random names.
+
+
+7) Make a package called 'my_packages' that contains 2 packages first one called Transformers and second one called Operations in Transformers package make a module called StringTransformer that has 2 functions one to reverse a string and second one to capitalize a string, and in the Operations package make one module called Math that has 1 function get_average to get average of list values, then make a notebook to use these functions.
+
