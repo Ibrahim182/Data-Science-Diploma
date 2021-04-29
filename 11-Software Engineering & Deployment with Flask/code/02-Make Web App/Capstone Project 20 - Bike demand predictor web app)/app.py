@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, render_template, request
 import joblib
 
 # __name__ is equal to app.py
@@ -8,12 +8,19 @@ app = Flask(__name__)
 model = joblib.load('model.pkl')
 
 
+
+@app.route("/", methods=['GET'])
+def home():
+    return render_template('index.html')
+
+
+
 @app.route("/predict", methods=["POST"])
 def predict():
-	tempreture =  request.json['Tempreture']
-	humadity =  request.json['Humadity']
-	wind =  request.json['Wind']
-	season =  request.json['Season']
+	tempreture =  request.form['Tempreture']
+	humadity =  request.form['Humadity']
+	wind =  request.form['Wind']
+	season =  request.form['Season']
 
 	if season == 'winter':
 		is_spring = 0
@@ -33,7 +40,7 @@ def predict():
 		is_winter = 0
 
 	bike_count = int(round(model.predict([[tempreture, humadity, wind, is_spring, is_summer, is_winter]])[0]))
-	return jsonify({"bike_count": bike_count})
+	return render_template("index.html", bike_count=bike_count)	
 
 
 
