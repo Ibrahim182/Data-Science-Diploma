@@ -7,4 +7,4 @@ Task 1
 Task 2
 ------------
 1) Open "02- Pandas" Folder.
-2) Solve "11 - Ecommerce Purchases Exercise.ipynb" notebook.
+2) Apply data analysis on 'covid-19' dataset.
