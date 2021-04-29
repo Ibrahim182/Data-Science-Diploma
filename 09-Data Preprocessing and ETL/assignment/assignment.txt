@@ -53,8 +53,3 @@ Task 8
 1) Using black_friday.csv and apply what you learned in data preprocessing lectures.
 2) Using loan_data.csv and apply what you learned in data preprocessing lectures.
 
-
-
-Task 9
-----------
-1) Using loan_data.csv and apply what you learned in feature selection lectures.
