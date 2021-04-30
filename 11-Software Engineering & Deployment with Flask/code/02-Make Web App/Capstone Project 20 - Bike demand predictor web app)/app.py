@@ -5,7 +5,7 @@ import joblib
 app = Flask(__name__)
 
 # load model from model.pck
-model = joblib.load('model.pkl')
+model = joblib.load('model.h5')
 
 
 
