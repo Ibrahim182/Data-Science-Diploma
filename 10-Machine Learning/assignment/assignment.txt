@@ -1,0 +1,5 @@
+1) Apply ML Regression techniques on "50_Startups.csv" dataset.
+2) Apply ML Classification techniques on "Social_Network_Ads.csv" dataset.
+3) Apply ML Clustering techniques on "Country-data.csv" dataset.
+
+4) Choose a custom idea from your choice then search for a dataset on websites like kaggle, also u can scrap it if dataset not found and then apply what you learned on the whole course including analysis & visualization & data preprocessing & ML.
