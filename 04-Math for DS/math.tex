@@ -1,0 +1,557 @@
+\documentclass[4apaper,12pt]{book}
+\usepackage{amsmath}
+\usepackage{index}
+\usepackage{gensymb}
+\usepackage[toc,page]{appendix}
+\usepackage{hyperref}
+\usepackage[semicolon,round,sort&compress,sectionbib]{natbib}
+\usepackage{graphicx,accents}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+%\usepackage[demo]{graphicx}
+\pgfplotsset{width=10cm,compat=1.9}
+\usepgfplotslibrary{external}
+
+% Define \figref as abbreviation of "Figure~\ref{...}"
+\newcommand\figref{Figure~\ref}
+%\usetikzlibrary{positioning}
+\usetikzlibrary{positioning, fit, arrows.meta, shapes, chains}
+
+% used to avoid putting the same thing several times...
+% Command \empt{var1}{var2}
+\newcommand{\empt}[2]{$#1^{\langle #2 \rangle}$}
+
+\makeindex
+
+\usepackage{amssymb}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{Epsilon Center}
+\fancyhead[RE,LO]{DS}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage}
+
+\begin{document}
+\title{Introduction to mathematics of Data Science}
+
+\author{mohab metwally}
+\date{2021}
+\maketitle
+\tableofcontents
+
+\chapter{Introduction to probabilities}
+\section {Probability mass function}
+\begin{description}
+\item let's take fair coin with two sides head $h_h$, and tails $h_t$, in the experiment of flipping the coin k times, the probability (probability mass function) of getting heads is $\frac{k_{h}}{k}$, and probability of getting tail is $\frac{k_{t}}{k}$, and the sum of all possible events is $\frac{k_{h}}{k} + \frac{k_{t}}{k}=1$, note that $k_{h}+k_{t}=1$.
+\item in this experiment the possible outcomes $\Omega = \{head, tail\}$, and probability of an event A, $p(A) = \frac{\left|A\right|}{\left|\Omega\right|}$, the sample space in the experiment has size of 2, for event A being head, the frequency of getting head in single coin flip is just 1, then $p(A) = \frac{1}{2}$.
+\item let's take another example, When we throw a die, the obvious choice of the
+  sample space is $\Omega = \{1, 2, 3, 4, 5, 6\}$, and the probability mass function should be
+  given by p(i) = 1/6, $i = 1, \dots , 6$. The probability of the event $\{2, 4, 6\}$ that the
+  outcome is even is now easily seen to be $p(\{2,4,6\}) = p(2) + p(4) + p(6) = \frac{1}{2}$.
+\end{description}
+  \section{Combinatorics}
+  \begin{description}
+  \item starting with a set, ordered, or unordered (the difference matters in calculation), for example {1,2,3}, the list of ordered subsets of size two are (1,2), (2,1), (1,3), (3,1), (2,3), (3,2); the list of unordered subsets of size two are \{1,2\}, \{1,3\}, and \{2,3\}.
+  \item given any set with length n, the number of possible sequences of length k is $n^k$, in the previous example all possible sequences of length 2 is $3^2=6$
+  \item the number of ordered subsets of k elements from the same set is: $n \times (n-1) \times \dots \times (n-k+1)$, in the previous set that is $3 \times 2$.
+  \item the number of subsets of k elements from a set with n elements is n choose k, denoted by $\binom{n}{k} = \frac{n \times (n-1) \times \dots \times (n-k+1)}{k!}=\frac{n!}{k!(n-k)!}$
+  \item Example(with replacement) Consider an urn with eight balls,numbered $1,\dots, 8$. We draw three balls with replacement, that is, after drawing a ball, we note its number and put it back into the urn, so that it may be drawn a second or even a third time. The sample space $\Omega$ of this experiment consists of all sequences of length three, with the symbols $1,\dots, 8$. the sample space $\Omega$ has $8^3 = 512$ elements. we can conclude for any sequence of length 3 for instance (4, 4, 8) has probability 1/512 to occur.
+  \item Example(without replacement) Consider the same urn, with the same balls. We now draw three balls without replacement, that is, a chosen ball is not put back in the urn. We note the numbers of the chosen balls, in order. The sample space $\Omega^{\prime}$ corresponding to this event is the set consisting of all sequences of length three with the symbols $1, \dots , 8$ where each symbol can appear at most once. The number of elements in $\Omega^{\prime}$ is the number of ordered subsets of size three. this is equal to 8 × 7 × 6 = 336.
+  \item Example(unordered subset) Consider the same urn once more, this time choosing three balls simultaneously, so that the order is irrelevant. This experiment corresponds to the sample space $\Omega^{\prime\prime}$ which consists of all subsets of size  three of a set with eight elements. then $\Omega^{\prime\prime}$ of size 8 with choosing 3 with order $\frac{8X7X6}{3!} = 56$ elements. the probability to select the set {3, 7, 1} is now 1/56. Note that this is six times the probability of the event in the previous example. The reason for this is that the set {3, 7, 1} can appear in 3! = 6 different orderings.
+  \end{description}
+  \section{condition probability}
+  \begin{description}
+  \item for two events A, B in sample space $\Omega$, suppose $P(B) > 0$:
+    \begin{equation} P(A|B)=\frac{P(A \cap B)}{P(B)} \end{equation}
+  \item Example1, suppose we throw a die, what is the conditional probability of seeing a 3, conditioned ont he event that the outcome is at most 4? denoting the event of seeing 3 by $E_3$, and the event of the outcome is at most 4 by $E_{\leq{4}}$, in the obvious sample space, that $P(E_3)=\frac{1}{6}$, $P(E_{\leq{4}})=\frac{2}{3}$, and $P(E_3 \cap {E_{leq{4}}})=P(E_3)=\frac{1}{6}$ , hence:
+    \begin{equation}
+      P(E_3|E_{\leq4}) = \frac{P(E_3 \cap E_{\leq4})}{P(E_{\leq})} = \frac{1/6}{2/3} = \frac{1}{4}
+    \end{equation}
+  \item Example2: suppose we have a population of people, suppose in addition that the probability that an individual has a certain disease is 1/100. There is a test for this disease, and this test is 90\% acccurate, in the sense that the probability that a sick person is tested positive is 09, and that a healthy person is tested positive with probability 0.1. One particular individual is tested positive. Perhaps this individual is inclined to think the following: 'I have been tested positive by a test which is accurate 90% of the time, so the probability that I have the disease is 0.9, However, this is not correct, considering the first given statement.
+  \item let A be the event that this individual has the disease, and let B be the event that the test is positive. The individual is interested in the conditional probability $P(A|B)$. for a sick person, the test is positive with probability 0.9, Hence $P(B|A)=0.9$, and $P(B|A^c)=0.1$, and that $P(A) =0.01$.
+    \begin{equation}
+      P(A|B) = \frac{P(A\cap{B})}{P(B)} = \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|A^c)P(A^c)}
+    \end{equation}
+    \begin{equation}
+      = \frac{0.9*0.01}{0.9*0.01+0.1*0.99} = 0.09
+      \end{equation}
+    \end{description}
+  \section{bayes rule}
+  \begin{description}
+  \item we can generalize the previous rule, let $B_1,B_2,\dots,B_3$ be a partition of $\Omega$ such that $P(B_i)>0$ for all i, and let A be any event with $P(A)>0$, then for all i,
+    \begin{equation}
+      P(B_i|A) = \frac{P(A|B_i)P(B_i)}{\sum_{j=1}^{n}P(A|B_j)P(B_j)}
+    \end{equation}
+  \end{description}
+  \section{probabilities chain rule}
+  \chapter{calculus}
+  \begin{description}
+  \item given a function $f(x)$, how to calculate the rate of change at specific point of time?
+  \item the rate of change = $\frac{\Delta{y}}{\Delta{x}}$
+  \item but first how to interpret the rate of change? it's how var the function f changes per x, for example for f being the function of distance, and x is the time the rate of change is the average speed.
+  \item what if we are only interested of the speed at specific infinitesimal point? that is when the derivative is useful.
+  \item the derivative is the infinitesimal rate of change, or in other words, the rate of change of function f(x) when $\Delta{x} \to {0}$
+    \item to generalize this rule the derivative of f(x)
+    \begin{equation} \frac{df(x)}{dx}=\lim_{\Delta x \to 0}\frac{f(x+\Delta{x})-f(x))}{\Delta x} \end{equation}
+    \section{derivatives of most common function}
+    \begin{itemize}
+    \item \begin{equation} \frac{d}{dx}x^a = ax^{a-1} \end{equation}
+    \item \begin{equation} \frac{d}{dx}e^x = e^x \end{equation}
+    \item \begin{equation} \frac{d}{dx}a^x = a^xln(a) \mid a>0 \end{equation}
+    \item \begin{equation} \frac{d}{dx}ln(x) = \frac{1}{x} \mid x>0 \end{equation}
+    \item \begin{equation} \frac{d}{dx}\log_{a}(x) = \frac{1}{xln(a)} \mid x,a>0 \end{equation}
+    \item \begin{equation} \frac{d}{dx} sin(x) = cos(x) \end{equation}
+    \item \begin{equation} \frac{d}{dx} cos(x) = -sin(x) \end{equation}
+    \item \begin{equation} \frac{d}{dx} tan(x) = sec^2(x) \end{equation}
+    \end{itemize}
+  \end{description}
+  \section{higher derivatives}
+  \begin{description}
+  \item we learned to calculate the first derivative or the infinitesimal rate of change, for function f(x), if y=f(x) is the function of distance, and $y\prime=\frac{df(x)}{dx}$ is the velocity, then the second rate (acceleration) of change $y\prime\prime=\frac{d}{dx}\frac{df(x)}{dx}$ is calculate using the same rules above.
+  \item note that for a function f(x) to be differentiable is has to be continuous over x.
+  \end{description}
+  \section{partial derivatives}
+  \begin{description}
+  \item so far we discussed function defined in single variable, what if f is defined in two dimensions, or 3 dimensions, for example, f(x,y,z) could be the function of position of variable defined in x,y,z axis, the derivative is defined similarly in x,y,z respectively, and denoted as such:
+    \begin{equation} \frac{\partial{f}}{\partial{x}} = \frac{\partial{f(x,y,z)}}{\partial{x}} \end{equation}
+    \begin{equation} \frac{\partial{f}}{\partial{y}} = \frac{\partial{f(x,y,z)}}{\partial{y}} \end{equation}
+    \begin{equation} \frac{\partial{f}}{\partial{z}} = \frac{\partial{f(x,y,z)}}{\partial{z}} \end{equation}
+    \begin{equation} \nabla{f(x,y,z)} = \frac{\partial{f(x,y,z)}}{\partial{x}}\hat{i} +\frac{\partial{f(x,y,z)}}{\partial{x}}\hat{j} + \frac{\partial{f(x,y,z)}}{\partial{x}}\hat{k} \end{equation}
+  \item for example $f(x,y,z) = x^2 + y^2 + 2z + 1$, then
+    \begin{equation} \nabla{f(x,y,z)} = 2x\hat{i} + 2y\hat{j} + 2\hat{k} \end{equation}
+  \item meaning that the derivative of f in x-axis = 2x, and on y-axis is 2y, and on z-axis is 2
+
+  \end{description}
+  \section{chain-rule of partial derivatives}
+  \begin{description}
+  \item for function f defined in terms of second function g, where g is defined in terms of third function z, where z is function of x as follows f(g(z(x))), what is $\frac{df}{dx}$?
+    \begin{equation} \frac{df}{dx} = \frac{\partial{f}}{\partial{g}}\frac{\partial{g}}{\partial{z}}\frac{\partial{z}}{\partial{x}} \end{equation}
+  \item Example assume $f(g(z(x)))$ is the function of position of a particle, $f(g) = g^2$, $g(z)=z^2, z(x)=2x$, what is the speed of the particle? particle speed: $\frac{\partial{f}}{x}$:
+    \begin{equation} \frac{\partial{f}}{\partial{g}}\frac{\partial{g}}{\partial{z}}\frac{\partial{z}}{\partial{x}} = 2g*2z*2 \end{equation}
+  \end{description}
+  \section{integrals}
+  \begin{description}
+  \item starting with the derivative $\frac{f(x)}{dx}$, how can we derive the original function f(x)?
+  \item remember $y\prime=\frac{f(x)}{dx}$, then $y\prime{dx=df(x)}$, the reverse of the $d$ operator is the integral operator $\int$, thus $f(x) =\int{y\prime{dx}}$
+  \item since the integral operator is the inverse of the derivative operator, we can reverse the direction of the derivatives above to derive the rules for integration:
+    \begin{itemize}
+    \item \begin{equation} \int ax^{a-1} = x^a + c  \end{equation}
+    \item \begin{equation} \int e^x = e^x + c\end{equation}
+    \item \begin{equation} \int a^xln(a) = a^x +c \mid a>0 \end{equation}
+    \item \begin{equation} \int \frac{1}{x} = ln(x)  \mid x>0 \end{equation}
+    \item \begin{equation} \int \frac{1}{xln(a)} = \log_{a}(x) +c   \mid x,a>0 \end{equation}
+    \item \begin{equation} \int cos(x) = sin(x) + c\end{equation}
+    \item \begin{equation} \int sin(x) = -cos(x) + c   \end{equation}
+    \item \begin{equation} \int sec^2(x) =  tan(x) + c   \end{equation}
+    \end{itemize}
+  \item note that the c is the derivative constant, but why it's there?
+  \item imagine the original function $y=f(x) = x^2 + 1$
+    \begin{equation}  y\prime=\frac{df(x)}{dx} = 2x \end{equation}
+    \begin{equation} \int y\prime dx = \int 2x = x^2 + c \end{equation}
+    \item note if we didn't add the constant c, then there is no way to derive the intercept 1, and the way to recover is through any valid point from the original function, for example the point$(1,2)$ satisfies f(x), $2 = 1 + c$, then $c=1$, thus the original equation $y=x^2+1$.
+  \end{description}
+  \section{integration defined over a range}
+  \begin{description}
+  \item the integration for function $\frac{df(x)}{dx}$, defined over an interval [a-b], denoted by:
+    \begin{equation} \int_{a}^{b}\frac{df(x)}{dx} dx= f(x) |_{a}^{b} = f(b) - f(a) \end{equation}
+  \end{description}
+  \begin{description}
+  \item Exercise, for a car moving to the left from the origin at rest moving in a straight line, such that for a short time it's velocity is defined by $v=(3t^2+2t)$ ft/s, where t in seconds, determine its position and acceleration when $t=3$ s, when $t=0$, $s=0$.
+    \item for the position:
+       \begin{equation} v = \frac{ds}{dt} = (3t^2+2t) \end{equation}
+       \begin{equation} \int_{0}^{2} ds = \int_{0}^{t} (3t^2 + 2t)dt \end{equation}
+       \begin{equation} s|_{0}^{s} = t^3 + t+2|_{0}^{t} \end{equation}
+     \item at time t=3 s,
+       \begin{equation} s = 3^3 + 3^2 = 36 ft \end{equation}
+     \item for acceleration:
+       \begin{equation} a = \frac{v}{t} = \frac{d(3^2+2t)}{dt} \end{equation}
+       \begin{equation}  = 6t + 2 \end{equation}
+     \item when t=3s,
+       \begin{equation} a = 6(3) + 2 = 20 ft/s^2 \end{equation}
+  \end{description}
+  \chapter{Linear Algebra}
+  \section{vector}
+  \begin{description}
+  \item what is a vector? so far we have been dealing with scale variables, or variables expressed in single dimension thus scalar, imagine a hinge fixed on the wall, the reactionary force from the wall against he hinge is expressed in three dimension, and can be expressed in x,y,z axis respectively:
+    \begin{equation} F=\begin{vmatrix}f_x\\f_y\\f_z\end{vmatrix} \end{equation}
+  \item variables expressed in terms of vectors have it's own rules of arithmetic, for two vectors
+    \begin{equation} v_a = \begin{vmatrix}3\\6\end{vmatrix}, and v_b = \begin{vmatrix}1\\2\end{vmatrix} \end{equation}.
+  \item addition, and subtractions are straight forward, and executed for each dimension separately
+    \subsection{addition}
+    \begin{description}
+      \item .
+       \begin{equation} v_a + v_b = \begin{vmatrix}3+1\\6+2\end{vmatrix} \end{equation}
+      \end{description}
+    \subsection{subtraction}
+    \begin{description}
+      \item .
+      \item \begin{equation} v_a - v_b = \begin{vmatrix}3-1\\6-2\end{vmatrix} \end{equation}
+      \end{description}
+    \subsection{dot product}
+    \begin{description}
+    \item the dot product is representation of how var two vectors are aligned to each others, the dot product between two vector is maximum if the two vectors are aligned along the same line, and is zero if both vectors are perpendicular.
+      \begin{equation} v_a . v_b = \left|v_a\right|*\left|v_b\right|*cos(\theta) \end{equation}
+        \item  $\theta$ is the angle between the two vectors
+    \end{description}
+    \subsection{cross product}
+    \begin{description}
+    \item the cross product is representation of area between two vector, the resultant vector is perpendicular to the plane wrapping the two vectors.
+      \begin{equation} v_a \times v_b = \left|v_a\right|\left|v_b\right|*sin(\theta) \end{equation}
+        \item $\theta$ is the angle between the two vectors
+      \end{description}
+  \end{description}
+  \section{Matrix}
+  \begin{description}
+  \item so far we talked about scalar variables, and vector variables, the variable be a collection of vectors?
+    \item in many fields such as robotics, machine learning, and even pure mathematics, there is always a need to perform the same computation, or arithmetic on a collection of vectors at once to either save computation time, or mathematical elegance, and simplicity, for this reason matrices are required, but what are they?
+    \item matrix is a collection of vectors of any size, for example for vectors in 3-dimensions, a matrix of 2 vectors is 3X2 matrix, a matrix of 4 vectors is 3X4 matrix, and mXn matrix is written as follow: $\begin{vmatrix}e_{11}&&e_{12}&&\dots&&e_{1n}\\e_{21}&&e_{22}&&\dots&&e_{2n}\\\vdots\\e_{m1}&&e_{m2}&&\dots&&e_{mn}\end{vmatrix}$
+    \item but what a matrix represent? ti can be set of force vectors acting on a rigid body, pixels on an image, robot kinematics state, rotation, or transformation  matrix, you can think of a matrix as a data-set of different numerical features.
+
+      \subsection{arithmetic on the matrix}
+    \item for two matrices of the same shape, 3X3 matrices $A = \begin{vmatrix}1&3&5\\7&9&11\\13&15&17\end{vmatrix}$, and $B=\begin{vmatrix}0&2&4\\6&8&10\\12&14&16\end{vmatrix}$.
+    \item in addition, and subtraction you need to make sure the two matrices are of the same size, otherwise, the operation fails, just like in vectors.
+      \begin{description}
+        \subsection{addition}
+        \item A+B:
+          \begin{equation} \begin{vmatrix}0+1&2+3&4+5\\6+7&8+9&10+11\\12+13&14+15&16+17\end{vmatrix}\end{equation}
+
+        \subsection{subtraction}
+        \item A-B:
+          \begin{equation} \begin{vmatrix}0-1&2-3&4-5\\6-7&8-9&10-11\\12-13&14-15&16-17\end{vmatrix}\end{equation}
+        \subsection{multiplication}
+        \item A*B:
+          \begin{equation} \begin{vmatrix}0*1+2*7+4*13&&0*3+2*9+4*15&&0*5+2*11+4*17\\6*1+8*7+10*13&&6*3+8*9+10*15&&6*5+8*11+10*17\\6*1+8*7+10*13&&6*3+8*9+10*15&&6*5+8*11+10*17\end{vmatrix} \end{equation}
+        \item notice we multiply each row's entries from the first matrix by each column's entries, from the second matrix, also notice that matrix multiplication isn't symmetric, for example $A\times B\neq{B}\times A$
+        \item what is the size of the output matrix?
+        \item $A_{m\times k}$ is a matrix of size $m\times k$, and $B_{k\times n}$ is a matrix of shape $k\times n$, the multiplication is possible only if the number of columns in the first matrix equals to the number of rows in the second matrix, and the resultant matrix is $m\times n$ matrix.
+        \item for example $A_{3X2}\times B_{2X4}=C_{3X4}$, mean while $B_{2X4} \times A_{3X2}$ isn't valid operation for the columns of B(first) is 4, and the rows of A(second) is 3, and $4\neq3$, thus, the operation isn't valid.
+
+        \item the product of two matrices can be interpreted as the transformation of one matrix by another.
+      \end{description}
+      \subsection{Determinant}
+    \item Determinant is a metric of measuring the spread of a square-matrix $n\times n$ vector, or scalar value for the volumn between the matrix vectors.
+    \item Determinant of matrix A is $\left|A\right|$:
+      \subsection{determinant of 2X2 matrix}
+    \item for a square 2X2 matrix:
+    \item $\left|A\right| = \begin{vmatrix}a&b\\c&d\end{vmatrix} = ad-bc$
+      \subsection{determinant of 3X3 matrix}
+    \item  for a square 3X3 matrix:
+    \item $\left|A\right| = \begin{vmatrix}a&b&c\\d&e&f\\g&h&i\end{vmatrix} = a.det(\begin{vmatrix}e&f\\h&i\end{vmatrix}) - b.det(\begin{vmatrix}d&f\\g&i\end{vmatrix}) + c.det(\begin{vmatrix}d&e\\g&h\end{vmatrix})$
+          \item note that the odd indices have positive sign, and the even indices have negative sign.
+            \subsection{determinant of nXn matrix}
+          \item the determinant of nXn matrix can be generalize previous maintaining positive signs for odd indices, and negative sign for even indices
+          \item for example for 4X4 matrix:
+            \begin{equation} det(\begin{vmatrix}a&b&c&d\\e&f&g&h\\i&j&k&l\\m&n&o&p\end{vmatrix}) =\end{equation}
+                \begin{equation} a.det(\begin{vmatrix}f&g&h\\j&k&l\\n&o&p\end{vmatrix}) - b.det(\begin{vmatrix}e&g&h\\i&k&l\\m&o&p\end{vmatrix}) + c.det(\begin{vmatrix}e&f&h\\i&j&l\\m&n&p\end{vmatrix}) - d.det(\begin{vmatrix}e&f&g\\i&j&k\\m&n&o\end{vmatrix}) \end{equation}
+                \subsection{Transpose}
+              \item the transpose of a matrix A is $A^T$ the function of replacing rows with columns in the same relative order.
+                \begin{equation}  A = \begin{vmatrix}a&b\\c&d\end{vmatrix} \mid A^T =\begin{vmatrix}a&c\\b&d\end{vmatrix} \end{equation}
+              \item note that $(A^T)^T = A$
+                \subsection{Adjugate}
+                \item adjugate is a function over a square matrix, has wide spread in geometry, robotics, and machine learning, and used to define the inverse of a matrix.
+                \item adjugate of a matrix A, is the transpose of the Cofactor of A.
+                    \subsection{adjugate of 2X2 matrix}
+                \item for $A=\begin{vmatrix}a&b\\c&d\end{vmatrix}$,  $adj(A)=\begin{vmatrix}d&-b\\-c&a\end{vmatrix}$.
+                  \subsection{adjugate of nXn matrix}
+                \item adjugate of more than 2X2 matrix can get very complex, and usually calculated with numerical libraries.
+                  \subsection{inverse}
+                \item inverse of a matrix is analogous to the inverse in scalar variables, but calculated differently, the inverse of A, is $A^-1=\frac{1}{A}$.
+                  \begin{equation} A^-1 = \frac{1}{det(A)}adj(A) \end{equation}
+                    \subsection{Identity}
+                \item the identity matrix I is a square matrix with value 1 on the left diagonal, zeroed-out in the upper, and lower triangles of the matrix.
+                  \begin{equation} I_n=\begin{vmatrix}1&0&\dots&0\\0&1&\dots&0\\\vdots\\0&0&\dots&1\end{vmatrix} \end{equation}
+                \item for matrix $A_{n\times n}$, and identity matrix $I_{n \times n}$,
+                  \begin{itemize}
+                  \item $A*I = A = I*A$
+                  \item $I^T=I$
+                  \item $I^-1=I$
+                  \end{itemize}
+  \end{description}
+  \chapter{Statistics}
+  \section{data}
+  \begin{description}
+  \item statistics is theory of making sense of the data, through certain tools we will explore.
+  \item but first what is data? what is the data looks like? data set is matrix, or list of vectors, a vector can be Qualitative, or Quantitative.
+    \subsection{data types}
+  \item \textbf{Qualitative data}:
+    \begin{itemize}
+    \item \textbf{Nominal}: nominal data are categorical data types i.e  sex, status, religion, there is no priorities between different states.
+    \item \textbf{Ordinal}: ordinal data type is a discrete categorical data type meaning there are priorities, or in other words comparison between different states is possible i.e shoes, or shirt size.
+    \end{itemize}
+  \item \textbf{Quantitative data}:
+    \begin{itemize}
+    \item \textbf{Discrete}: discrete data is monotonically increasing numerical discrete data i.e number of electrons in the cell, or pages of a book.
+    \item \textbf{Continuous}: continuous numerical data such as temperature of a day: $45.3^\circ$, or height 177.3 cm.
+    \end{itemize}
+  \item given a data-set of tens, hundreds or thousands of entries, or even millions of entries, how can we make sense of it all?!
+  \end{description}
+  \section{Anecdotal Evidence}
+  \begin{description}
+  \item we agreed we have a large data-set from hundreds, thousands, to millions of entries, we can't derive a conclusion about the whole data-set from a single entry! for example if the data-set represent  the temperature of Cairo in the previous 3 months, assume a single entry was for midnight $10^\circ$ we can take this entry as a representative of the temperature of Cairo! this is called \textbf{Anecdotal evidence}, this is very common in the biased media, and journalism, and considered a bad trait of course.
+  \end{description}
+  \section{Descriptive Statistics}
+  \begin{description}
+  \item How can we reach a conclusion over the whole data-set  from a single number?
+  \item there are different aspects to look at \textbf{Central Tendency}, \textbf{Dispersion}, and \textbf{Correlation}.
+    \section{Central Tendency}
+    \begin{description}
+    \item central tendency are set of statistical tools to summarizing the most effective entries  of the data-set
+      \subsection{Mean}
+    \item the most common of them all is the mean, defined as follows: for data-set of \textbf{m} entries of variable x
+       \begin{equation} \mu = \frac{1}{m}\sum_{i=1}^{m}x_i \end{equation}
+    \item for example what is the average of for 3 days temperature? the measurements are 44, 45, and 46, the average is $\frac{44+45+46}{3} = 45$
+      \item in short the mean of variable X is the average of variable X.
+    \end{description}
+    \subsection{Median}
+    \item in a variable X of numerical values, median is the middle entry, if we said Ahmed is 25, Alaa 27, heba is 24, Ali is 31 mohammed is 29, what is the median, or the middle value? first let's wort this age variable 24, 25, 27, 29, 31, the middle value is 27, so the Media is Alaa's age.
+  \end{description}
+  \subsection{Mode}
+  \begin{description}
+  \item the most recurrent entry in the data-set variable is coined the Mode, for example if we extend the previous example, if we said Ahmed is 25, Alaa 27, heba is 24, Ali is 31, sara is 25 mohammed is 29, what is the Mode, or the most recurrent value? notice here the 24 is the most recurrent, with frequency of two, thus 24 is the mode.
+  \end{description}
+  \section{Dispersion}
+  \begin{description}
+  \item the dispersion of two different variable from different distributions of the same features can varies, for example $X_1$ can be the variable for change in temperature in London (which is cold most of the time), and $X_2$ can be the variable for change in temperature in Cairo (which varies greatly between season), the dispersion of variable $X_2$ spans larger extend/range compared with $X_1$, for example [1,2,3,4,5] is more wide-spread compared to [2,3,4], how can we measure dispersion?
+    \subsection{variance, and standard deviation}
+  \item variance of variable X is of size m the measurement of how far variable X is disperse, and defined as such:
+    \begin{equation} \sigma = \frac{\sum_{i=1}^m(x_i-\mu)^2}{m} \end{equation}
+  \item we can express the variance as the normalization, or average of the sum of demeaned entries, this represents the average of how far each entry from the mean $\mu$
+  \item standard deviation is defined as $\sqrt{\sigma}$
+  \end{description}
+  \subsection{percentile}
+  \begin{description}
+  \item the \textbf{n}th percentile is a threshold percentage before which \textbf{n}th percent of date falls behind.
+  \item for example what is the 25th percentile is 100 for a variable X?  this means that 25\% of the data are less than 100.
+  \end{description}
+  \subsection{range}
+  \begin{description}
+  \item the difference between the highest, and lowest entries values for variable X is coined the range, for example the X = [3,6,9,12], the range of $x  = 12-3=9$.
+  \end{description}
+  \subsection{Inter Quartile Range IQR}
+  \begin{description}
+    \subsection{Outliers}
+
+    \item outliers are few entries with values greatly deviating from the mean.
+    \item let's taken an example, consider class of 5 students Omar is 22, Asmaa is 23, Sara is 34, Magid is 26, while Saad is 105, what is the average age of the students in the class?
+      \begin{equation} \mu = \frac{22+23+34+26+105}{5}=42 \end{equation}
+    \item note 42 is larger than most students in the class, how can this makes any sense? does the mean in this case represent most of the students? No, this is due to the very old age of Saad being 105! if we removed this entry from the data set, what is the average age in the class once again?
+      \begin{equation} \mu = \frac{22+23+34+26}{4}=26.25 \end{equation}
+    \item does this make any sense? is it close most of the students?
+
+    \item there is a way to represent most of the data?
+    \item let's define IQR, it's a bounding box around the data between the \textbf{25}th percentile/first Quartile, and \textbf{75}th percentile/third Quartile  while the \textbf{50}th/the median in between, and the Inter Quartile \textbf{Range} is the range from  first quartile to the third quartile, this range captures most of the data and at least 50\% of the data for uniform distribution, so we can safely clam that most of the data resides within the boundaries of IQR.
+      \subsection{Outliers detection}
+    \item a test made by statisticians for outliers detection is based of this assumption those entries further away from the median are considered Qutliers, but how much further? any entry outside the following range is considered outlier:
+      \begin {equation} [1^{st}Quartile - 1.5*IQR \to 3^{rd} Quartile + 1.5 * IQR ] \end{equation}
+    \item so far we have learned to derive general conclusion over the whole data set using the tools of Central Tendency, and Dispersion we seen so far, How can we derive conclusions on the relation between different variables in the data-set?
+      \section{Correlation}
+      \begin{description}
+      \item for two variables X, Y, how var those two variables are correlated?
+      \item please keep in mind that positive correlation means as X increase Y also increase, and the reverse, and negative correlation means as X increase, Y decreases, and the reverse is also true.
+      \item let's take few examples:
+        \begin{itemize}
+        \item what is the correlation between Weight(X), and Height(Y) of humans? are they correlated? positively, or negatively?
+        \item what is the correlation between Educational Level(X), and Salary(Y)? is it positive or negative?
+        \item what is the correlation between Smoking(X), and Life Expectancy(Y)? is it positive or negative
+        \end{itemize}
+        \subsection{Pearson correlation}
+      \item pearson's score is within -1, and 1, -1 means absolutely negatively correlated variables, and being highest positive correlation possible, ~0 means no correlation at all, and values within ]0-1] means positive corelation, while [-1,0[ means negative correlation.
+            \item definition:
+              \begin{equation} r = \frac{\sum_{i=1}^{m}(X-\mu_{x})(Y-\mu_{y})}{(m-1)\sigma_x\sigma_y} \end{equation}
+              \end{description}
+      \subsection{Covariance}
+    \item Covariance is less neat compared to Pearson correlation, it's the same equation without the normalization by the standard deviation of both variables, meaning the range of correlation is between $-\infty$, and $\infty$
+      \begin{equation} S_{xy}^2 = \frac{\sum_{i=1}^{m}(X-\mu_{x})(Y-\mu_{y})}{(m-1)} \end{equation}
+      %TODO add the covariance matrix
+  \end{description}
+  \section{distribution}
+  \begin{description}
+  \item Distribution if a probability function of all possible outcomes.
+  \item there are wide range of distribution as there are wide range of function, the distribution can be uniform meaning each even occur with the same probability as each other event, or completely non-uniform, and almost indescribable, there are several of studied distributions, the most common in nature, and almost all field of sciences is the Normal/Gaussian distribution, also known as Bell curve.
+  \item assume f(x) is the function of height, and x is the variable for Egyptian males\textbf{What is the probability of Egyptian male being 177 cm tall?} what if i told you that this is the average height for Egyptian male, can you make a guess? is it 0.3 (5%)? more? (20%)?, even more? (50%)? believe it or note the answer to this question is 0! it's almost impossible for a person to be exactly 177 cm tall1 for example $177.1 \neq 177$cm , also $177.000001\neq177$cm!
+    \item how to reformulate the question to be more realistic, or sensible? recall the definition of \textbf{pdf}, or the density mass function as integral defined over a range, or the area under the curve within that range, $\int_{a}^{b}f(x)dx$
+    \item once again what is the probability for Egyptian male to be around 177cm? how can you formulate this mathematically? using pdf we can write it as such
+      \begin{equation} \int_{167.5}^{177.5}f(x)dx \end{equation}
+    \item now we are certainly sure that this is much larger than zero, and it's interpreted as follow what is the probability of Egyptian male's height  being within [167.5-177.5]cm that is ~177cm.
+    \item what is the probability of Egyptian male being of any height? first how to formulate this mathematically?
+      \begin{equation} \int_{-\infty}^{\infty}f(x)dx \end{equation}
+    \item the answer is of course 1
+      %TODO covariance matrix
+    \subsection{Gaussian distribution}
+    \begin{description}
+  \item the bell curve is described by the standard mean, and the standard deviation.
+  \item the mean of the Gaussian distribution is happens to be the mode, and median.
+    \subsection{Examples on the Gaussian distribution}
+    \item why the Gaussian is so important?
+    \begin{itemize}
+    \item the arrival of train at the station is distributed normally.
+    \item human intelligence anywhere in the world is normally distributed.
+    \item the quality of manufacturing fits normal distribution.
+    \end{itemize}
+    \item can you think of more examples?
+    \subsection{empirical rule}
+    \begin{description}
+    \item the empirical rule indicate that:
+      \begin{itemize}
+        \item ~68\% or 68.27\% of the population are within $\sigma$.
+        \item ~95\% or 95.45\% are within $2\sigma$.
+          \item ~100\% or 99.7\% are within $3\sigma$.
+      \end{itemize}
+    \item the Gaussian distribution for variable x is defined as follows:
+      \begin{equation} f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}} \end{equation}
+    \item note e is Euler constant ~2.7, $\sigma$ is the standard deviation, while $\mu$ is the mean of variable x, $\pi$ is the famous constant ~3.14!
+    \item also notice there is a negative sign on the power.
+    \end{description}
+    \end{description}
+    %sampling, and central limit theorem
+    % define standard error as normalization by sample number
+    \subsection{Z-score}
+  \item the z-score the normalization of the demeaned sample by the standard deviation, defined as:
+    \begin{equation} \frac{x-\mu}{\sigma} \end{equation}
+  \item Here is an example of how a z-score applies to a real life situation and how it can be calculated using a z-table. Imagine a group of 200 applicants who took a math test. George was among the test takers and he got 700 points (X) out of 1000. The average score was 600 ($\mu$) and the standard deviation was 150 ($\sigma$). Now we would like to know how well George performed compared to his peers.
+  \item Z-score for George is $\frac{700-600}{150} = 0.67$, from the z-table this is equivalent to the ~75\% percent, meaning that George is one of the top ~25\%.
+  \item note that using \textbf{pdf} function over the Gaussian distribution function we introduced the following table can be calculated.
+    \begin{table}[]
+      \centering
+      \caption{Z-score (positive)}
+      \label{my-label}
+      \begin{tabular}{lllllllllll}
+        z   & 0       & 0,01    & 0,02    & 0,03    & 0,04    & 0,05    & 0,06    & 0,07    & 0,08    & 0,09    \\
+        0   & 0,5     & 0,50399 & 0,50798 & 0,51197 & 0,51595 & 0,51994 & 0,52392 & 0,5279  & 0,53188 & 0,53586 \\
+        0,1 & 0,53983 & 0,5438  & 0,54776 & 0,55172 & 0,55567 & 0,55962 & 0,56356 & 0,56749 & 0,57142 & 0,57535 \\
+        0,2 & 0,57926 & 0,58317 & 0,58706 & 0,59095 & 0,59483 & 0,59871 & 0,60257 & 0,60642 & 0,61026 & 0,61409 \\
+        0,3 & 0,61791 & 0,62172 & 0,62552 & 0,6293  & 0,63307 & 0,63683 & 0,64058 & 0,64431 & 0,64803 & 0,65173 \\
+        0,4 & 0,65542 & 0,6591  & 0,66276 & 0,6664  & 0,67003 & 0,67364 & 0,67724 & 0,68082 & 0,68439 & 0,68793 \\
+        0,5 & 0,69146 & 0,69497 & 0,69847 & 0,70194 & 0,7054  & 0,70884 & 0,71226 & 0,71566 & 0,71904 & 0,7224  \\
+        0,6 & 0,72575 & 0,72907 & 0,73237 & 0,73565 & 0,73891 & 0,74215 & 0,74537 & 0,74857 & 0,75175 & 0,7549  \\
+        0,7 & 0,75804 & 0,76115 & 0,76424 & 0,7673  & 0,77035 & 0,77337 & 0,77637 & 0,77935 & 0,7823  & 0,78524 \\
+        0,8 & 0,78814 & 0,79103 & 0,79389 & 0,79673 & 0,79955 & 0,80234 & 0,80511 & 0,80785 & 0,81057 & 0,81327 \\
+        0,9 & 0,81594 & 0,81859 & 0,82121 & 0,82381 & 0,82639 & 0,82894 & 0,83147 & 0,83398 & 0,83646 & 0,83891 \\
+        1   & 0,84134 & 0,84375 & 0,84614 & 0,84849 & 0,85083 & 0,85314 & 0,85543 & 0,85769 & 0,85993 & 0,86214 \\
+        1,1 & 0,86433 & 0,8665  & 0,86864 & 0,87076 & 0,87286 & 0,87493 & 0,87698 & 0,879   & 0,881   & 0,88298 \\
+        1,2 & 0,88493 & 0,88686 & 0,88877 & 0,89065 & 0,89251 & 0,89435 & 0,89617 & 0,89796 & 0,89973 & 0,90147 \\
+        1,3 & 0,9032  & 0,9049  & 0,90658 & 0,90824 & 0,90988 & 0,91149 & 0,91309 & 0,91466 & 0,91621 & 0,91774 \\
+        1,4 & 0,91924 & 0,92073 & 0,9222  & 0,92364 & 0,92507 & 0,92647 & 0,92785 & 0,92922 & 0,93056 & 0,93189 \\
+        1,5 & 0,93319 & 0,93448 & 0,93574 & 0,93699 & 0,93822 & 0,93943 & 0,94062 & 0,94179 & 0,94295 & 0,94408 \\
+        1,6 & 0,9452  & 0,9463  & 0,94738 & 0,94845 & 0,9495  & 0,95053 & 0,95154 & 0,95254 & 0,95352 & 0,95449 \\
+        1,7 & 0,95543 & 0,95637 & 0,95728 & 0,95818 & 0,95907 & 0,95994 & 0,9608  & 0,96164 & 0,96246 & 0,96327 \\
+        1,8 & 0,96407 & 0,96485 & 0,96562 & 0,96638 & 0,96712 & 0,96784 & 0,96856 & 0,96926 & 0,96995 & 0,97062 \\
+        1,9 & 0,97128 & 0,97193 & 0,97257 & 0,9732  & 0,97381 & 0,97441 & 0,975   & 0,97558 & 0,97615 & 0,9767  \\
+        2   & 0,97725 & 0,97778 & 0,97831 & 0,97882 & 0,97932 & 0,97982 & 0,9803  & 0,98077 & 0,98124 & 0,98169 \\
+        2,1 & 0,98214 & 0,98257 & 0,983   & 0,98341 & 0,98382 & 0,98422 & 0,98461 & 0,985   & 0,98537 & 0,98574 \\
+        2,2 & 0,9861  & 0,98645 & 0,98679 & 0,98713 & 0,98745 & 0,98778 & 0,98809 & 0,9884  & 0,9887  & 0,98899 \\
+        2,3 & 0,98928 & 0,98956 & 0,98983 & 0,9901  & 0,99036 & 0,99061 & 0,99086 & 0,99111 & 0,99134 & 0,99158 \\
+        2,4 & 0,9918  & 0,99202 & 0,99224 & 0,99245 & 0,99266 & 0,99286 & 0,99305 & 0,99324 & 0,99343 & 0,99361 \\
+        2,5 & 0,99379 & 0,99396 & 0,99413 & 0,9943  & 0,99446 & 0,99461 & 0,99477 & 0,99492 & 0,99506 & 0,9952  \\
+        2,6 & 0,99534 & 0,99547 & 0,9956  & 0,99573 & 0,99585 & 0,99598 & 0,99609 & 0,99621 & 0,99632 & 0,99643 \\
+        2,7 & 0,99653 & 0,99664 & 0,99674 & 0,99683 & 0,99693 & 0,99702 & 0,99711 & 0,9972  & 0,99728 & 0,99736 \\
+        2,8 & 0,99744 & 0,99752 & 0,9976  & 0,99767 & 0,99774 & 0,99781 & 0,99788 & 0,99795 & 0,99801 & 0,99807 \\
+        2,9 & 0,99813 & 0,99819 & 0,99825 & 0,99831 & 0,99836 & 0,99841 & 0,99846 & 0,99851 & 0,99856 & 0,99861 \\
+        3   & 0,99865 & 0,99869 & 0,99874 & 0,99878 & 0,99882 & 0,99886 & 0,99889 & 0,99893 & 0,99896 & 0,999   \\
+        3,1 & 0,99903 & 0,99906 & 0,9991  & 0,99913 & 0,99916 & 0,99918 & 0,99921 & 0,99924 & 0,99926 & 0,99929 \\
+        3,2 & 0,99931 & 0,99934 & 0,99936 & 0,99938 & 0,9994  & 0,99942 & 0,99944 & 0,99946 & 0,99948 & 0,9995  \\
+        3,3 & 0,99952 & 0,99953 & 0,99955 & 0,99957 & 0,99958 & 0,9996  & 0,99961 & 0,99962 & 0,99964 & 0,99965 \\
+        3,4 & 0,99966 & 0,99968 & 0,99969 & 0,9997  & 0,99971 & 0,99972 & 0,99973 & 0,99974 & 0,99975 & 0,99976 \\
+        3,5 & 0,99977 & 0,99978 & 0,99978 & 0,99979 & 0,9998  & 0,99981 & 0,99981 & 0,99982 & 0,99983 & 0,99983 \\
+        3,6 & 0,99984 & 0,99985 & 0,99985 & 0,99986 & 0,99986 & 0,99987 & 0,99987 & 0,99988 & 0,99988 & 0,99989 \\
+        3,7 & 0,99989 & 0,9999  & 0,9999  & 0,9999  & 0,99991 & 0,99991 & 0,99992 & 0,99992 & 0,99992 & 0,99992 \\
+        3,8 & 0,99993 & 0,99993 & 0,99993 & 0,99994 & 0,99994 & 0,99994 & 0,99994 & 0,99995 & 0,99995 & 0,99995 \\
+        3,9 & 0,99995 & 0,99995 & 0,99996 & 0,99996 & 0,99996 & 0,99996 & 0,99996 & 0,99996 & 0,99997 & 0,99997 \\
+        4   & 0,99997 & 0,99997 & 0,99997 & 0,99997 & 0,99997 & 0,99997 & 0,99998 & 0,99998 & 0,99998 & 0,99998
+      \end{tabular}
+    \end{table}
+    \section{Interval Estimate}
+    \begin{description}
+    \item consider the following problem, we are interested in the covid19 statistics, a team of researchers, started gathering samples, and their tasks is to estimate the percentage of true positive.
+    \item let's assume that the team have gathered sample from population of 1000 person at random, in a country of 100 million, that is 0.001\%, in reality a research is usually inducted on sample of perhaps 200 person, so 1000 is a large sample, can we trust the results of this experiment, and generalize the results to the whole population?
+    \item instead we can calculate the same results with certain confidence rate, let's say, the domain of \textbf{confidence rate} in this experiment is 95\% (note that this assumption varies from domain to another), hence the uncertainty is $1 - confidence$ let's define $\alpha=1-$\textbf{confidence rate}, so in this case $\alpha=1-95\%=0.05$
+    \item note that a Gaussian distribution is almost perfectly symmetric, and the 95\% confidence is the first 2$\sigma$ around the mean, while the other 5\% is distributed on the tails, 2.5\% on the right tail, and another 2.5\% on the other left tail, let's coin this the name $\alpha/2=\frac{\alpha}{2}$
+    \item now we are interest in the estimation at uncertainty $\sigma/2$, how can we calculate that?
+      \subsection{Reliability factor}
+    \item reliability factor, it's an indicator of the threshold of acceptable certainty, and denoted by $Z_{\alpha/2}$, or in other words the Z-score for the uncertainty $\alpha/2$.
+    \item but how this indicate the Reliability?
+      \item let's take very high confidence rate of 99\% the z-score for it is around -4 on the left hand side of the distribution, and ~4 on the right hand side of the distribution, on the other hand, the if we have low certainty as 50\% the equivalent z-score is 0!, so the higher the confidence rate, the higher the reliability factor.
+      \subsection{Confidence Interval}
+    \item confidence interval for variable x is the answer for this question, instead making a point estimate $\bar{x}$, we evaluate the latter with how var we are uncertain about the results using the \textbf{Reliability Factor} $Z_{\sigma/2}$, and \textbf{Standard Error} $\sigma_{\bar{x}}$, defined as follows:
+      \begin{equation}  \bar{x} \pm Z_{\sigma/2} * \sigma_{\bar{x}} \end{equation}
+    \end{description}
+    \section{Hypothesis Testing}
+    \begin{description}
+    \item assume a research in conducting a research, academically what hypothesis the unbiased researcher ought to adopt before and after the experiments?
+      \item the academic starts with null hypothesis, and based off research he, or she can adopt the alternative if the experiment shows otherwise.
+      \subsection{Null against Alternative Hypothesis}
+      \begin{itemize}
+      \item \textbf{Null Hypothesis}: it's the first hypothesis of equality, for example that the patient is sick, or the blood pressure is $\geq100$, or $\leq80$.
+        \item \textbf{Alternative Hypothesis}: it's the final hypothesis of inequality, for example the patient isn't sick, or the blood pressure is $<100$, or $>80$.
+      \end{itemize}
+    \item assume there is an experiment, after which is measure the uncertainty, and compare it with the original $\alpha$ of the null hypothesis.
+    \item if the uncertainty of the new experiment against the null hypothesis is lower than the uncertainty of the null hypothesis, then the believe/certainty  in the alternative hypothesis is higher, and thus we reject the null hypothesis, and adopt the alternative one.
+    \item how can we interpret the uncertainty?
+      \subsection{p-value}
+    \item \textbf{p-value}: under the assumption that the null hypothesis is correct, it's the probability of obtaining test results at least as extreme as the observed results.
+    \item how p-value in interpreted? a very small p-value means that the observed extreme outcomes are very unlikely, thus the null hypothesis is rejected, on the other hand, for a large p-value the null hypothesis is asserted that the observed outcomes are highly likely.
+    \item how to express p-value mathematically? p-value is the z-score from the z-table, for example p-value of 3.4 correspond to 99\% z-score meaning that the confidence in the observed data is extremely high, and the conducted experiment assert the null hypothesis, on the other hand -3.4 z-value has corresponding 0.03\% z-score, this means that the believe in the null hypothesis is very unlikely.
+    \item what threshold at which we determine what the z-score is low, or high? actually this changes from domain to another, and specific to each problem, for each problem the researcher decide confidence rate, or level of certainty, and compare p-value against $\alpha$, if \textbf{p-value < $\alpha$} then the null hypothesis is rejected.
+    \item \textbf{Example}: Current average waiting period for the customers who call the customer service helpline is 100 seconds with a standard deviation of 20 seconds. Certain changes were recently done to the IVR menu options as well as the overall customer service processes. After a week, the management picked-up a sample of 100 calls and found that the average waiting period was 95 seconds. Have the process implementations resulted in the waiting period reduction?
+      \begin{itemize}
+      \item \textbf{Null hypothesis}: there is no change in the waiting period.
+      \item \textbf{Alternative hypothesis}: the waiting period has reduced.
+      \item \textbf{significance Level} is assumed for this experiment to be 95\%, thus $\alpha=5\%$
+      \item parameter read: $\mu=100$, $\sigma=20$, $N=100$, $\bar{X}=95$
+      \item let's compute the parameters of the experiment: $\sigma_{\bar{x}}=\frac{\sigma}{\sqrt{N}}=2$, and $z=\frac{\bar{X}-\mu}{\sigma_{\bar{x}}}=-2.5$
+      \item the p-value is the corresponding z-score, from the z-table p-value is 0.62\%
+        \item 0.62 < 5, thus the null hypothesis is rejected, and the we can deduce that the waiting period has reduced.
+      \end{itemize}
+    \end{description}
+  \end{description}
+  \chapter{mathematics of Gradient Descent (case study Logistic regression)}
+
+  \section{definitions}
+
+  \begin{description}
+  \item we need an estimate function $\hat{y}$ for the input x, and weight prameters w$\in R^{n_x}, b\in R$.
+  \item logstic function is $\hat{y}=p(y=1|x)$, and can be defined as follows: $\hat{y}=\sigma(w^Tx+b)$, where the sigma function is defined by $\sigma(z)=\frac{1}{1+e^{-z}}$, and notice when z $\to \infty, \sigma = 1, z \to -\infty, \sigma =0$.
+  \item
+  \end{description}
+
+  \section{cost function}
+
+  \begin{description}
+  \item starting with a estimation linear forward model $\hat{y}$, we calculate the difference between our estimate, and the real value $y$, and through optimization we try to minimize the difference, or loss/cost through gradient descent, then we update our model's parameters.
+  \item loss function is minimizing the difference between estimation ${\hat{y}, y}$, and can be defined as least squre $L(\hat{y}, y)=\frac{1}{2}(\hat{y} - y)$, but least squares leads to non-convex loss function(with multiple local minimums).
+  \item there are different loss functions, but the most efficient is that which maximize the difference. we can define $P(y|x^{(i)}, \theta) = h(x^{(i)},\theta)^{y^{(i)}}(1-h(x^{(i)},\theta)^{1-y^{(i)}}$, to increase the sensitivity to the training set we take the likelihood function, as the loss, $L(\theta)=\prod_{i=1}^mP(y|x^{(i)}, \theta)$.
+  \item one final step in our model is that as m gets larger L tend to go to zero, to solve this we define the average sum of log-likelihood, or loss function to be our Cost function.
+  \item we multiply by -1 since the sum of the log-likelihood function is negative.
+  \item the Cost function  $J(\theta)=\frac{1}{m}\sum_{i=1}^{m}log(h(x^{(i)},\theta)^{y^{(i)}}(1-h(x^{(i)},\theta)^{1-y^{(i)}})$
+
+  \item loss function is defined as $L(\hat{y}, y)=-[ylog(\hat{y}) - (1-y)log(1-\hat{y})]$, L$\in[0-1]$.
+
+  \item cost function is defined as the average of loss function $J(w,b)=\frac{1}{m}\sum_{i=1}^{m}L(\hat{y^{(i)}}, y)$
+  \end{description}
+
+  \section{Gradient Descent}
+
+  \begin{description}
+
+  \item gradient descent is a way to tune the weighting parameters, the objective is the lean toward the fittest weights with respect to the least cost.
+  \item iterate through cost function $\mathbf{J}$ tuning with respect to weight parameters  $\mathbf{w}$, $\mathbf{b}$.
+  \item iterate through: $w:=w-\alpha\frac{\partial{J}}{\partial{w}}$,  $b:=b-\alpha\frac{\partial{J}}{\partial{b}}$, for tuning w, b for the least $\mathbf{J}$ possible, such that $\alpha$ is the learning rate of GD.
+  \item for simplicity $\partial{J}/\partial{w}$ replaced for $\partial{w}$, and similarly $\partial{J}/\partial{b}$ is replaced for $\partial{b}$.
+  \item forward propagation, $$\partial w = \frac{\partial{J}}{\partial{L}}\frac{\partial{L}}{\partial{\hat{y}}}\frac{\partial{\hat{y}}}{\partial{z}}\frac{\partial{z}}{\partial{w}}$$, similarly $$\partial b = \frac{\partial{J}}{\partial{L}}\frac{\partial{L}}{\partial{\hat{y}}}\frac{\partial{\hat{y}}}{\partial{z}}\frac{\partial{z}}{\partial{b}}$$.
+  \item $$\partial{L}/\partial{\hat{y}}=\frac{-y}{\hat{y}} + \frac{(1-y)}{1-\hat{y}}$$, $$\partial{\hat{y}}/\partial{z}=\frac{-e^{-z}}{1+e^{-z}} = \hat{y}(1-\hat{y}).$$
+  \item $\partial{L}/\partial{z}=\hat{y}-y$.
+  \item then we can deduce that the final iteration gradient descent step after calculating sigma, loss, and cost functions can be  $$w:=w-\frac{\alpha}{m}\sum_{i=1}^m\frac{\partial{L}}{\partial{b}}=\frac{\alpha}{m}X^T(\hat{y}-y)$$, and $$b:=b-\frac{\alpha}{m}\sum_{i=1}^{m}(\hat{y}-y)$$.
+  \end{description}
+
+
+  \section{Update parameters}
+  \begin{description}
+  \item we implement the following algorithm with a fixed number of iteration that is customized per application, and tuned by the Engineer, such that each application would require different tuning parameters from which is the iteration number.
+  \item we iterate the following: update the parameters $\omega$, b, in the back propagation step using $\partial{\omega}$, $\partial{b}$.
+  \item $$\omega = \omega - \frac{\alpha}{m}X^T(y-\hat{y})$$
+  \item $$b = b - \frac{\alpha}{m}(y-\hat{y})$$
+  \end{description}
+\end{document}
